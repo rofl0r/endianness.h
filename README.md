@@ -16,14 +16,14 @@ get a definition.
 #endif
 ```
 
-#license
+# license
 
 this file is published under the public domain.
 even in jurisdictions where the "public domain" is not an
 accepted opensource license, this header is too trivial
 to even think about assigning a copyright.
 
-#contribution
+# contribution
 
 if you notice an issue on a platform you're using, feel
 free to open a PR or issue.
