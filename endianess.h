@@ -23,13 +23,27 @@
 /* try to derive from arch/compiler-specific macros */
 #elif defined(_X86_) || defined(__x86_64__) || defined(__i386__) || \
       defined(__i486__) || defined(__i586__) || defined(__i686__) || \
+      defined(__MIPSEL) || defined(_MIPSEL) || defined(MIPSEL) || \
+      defined(__ARMEL__) || \
+      (defined(__LITTLE_ENDIAN__) && __LITTLE_ENDIAN__ == 1) || \
+      (defined(_LITTLE_ENDIAN) && _LITTLE_ENDIAN == 1) || \
       defined(_M_IX86) || defined(_M_AMD64) /* MSVC */
 # ifdef ENDIANESS_DEBUG
-#  warning "detected x86, setting little endian"
+#  warning "detected little endian target CPU"
 # endif
 # define __LITTLE_ENDIAN 1234
 # define __BIG_ENDIAN 4321
 # define __BYTE_ORDER __LITTLE_ENDIAN
+# elif defined(__MIPSEB) || defined(_MIPSEB) || defined(MIPSEB) || \
+       defined(__MICROBLAZEEB__) || defined(__ARMEB__) || \
+       (defined(__BIG_ENDIAN__) && __BIG_ENDIAN__ == 1) || \
+       (defined(_BIG_ENDIAN) && _BIG_ENDIAN == 1)
+# ifdef ENDIANESS_DEBUG
+#  warning "detected big endian target CPU"
+# endif
+# define __LITTLE_ENDIAN 1234
+# define __BIG_ENDIAN 4321
+# define __BYTE_ORDER __BIG_ENDIAN
 /* try to get it from a header. */
 #else
 # if defined(__linux)
