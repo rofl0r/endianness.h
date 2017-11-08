@@ -20,8 +20,19 @@
 # define __BYTE_ORDER __BYTE_ORDER__
 # define __LITTLE_ENDIAN __ORDER_LITTLE_ENDIAN__
 # define __BIG_ENDIAN __ORDER_BIG_ENDIAN__
-#else /* if not already defined by compiler, try to get it from header */
-# ifdef __linux
+/* try to derive from arch/compiler-specific macros */
+#elif defined(_X86_) || defined(__x86_64__) || defined(__i386__) || \
+      defined(__i486__) || defined(__i586__) || defined(__i686__) || \
+      defined(_M_IX86) || defined(_M_AMD64) /* MSVC */
+# ifdef ENDIANESS_DEBUG
+#  warning "detected x86, setting little endian"
+# endif
+# define __LITTLE_ENDIAN 1234
+# define __BIG_ENDIAN 4321
+# define __BYTE_ORDER __LITTLE_ENDIAN
+/* try to get it from a header. */
+#else
+# if defined(__linux)
 #  ifdef ENDIANESS_DEBUG
 #   warning "taking endianess from endian.h"
 #  endif
