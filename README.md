@@ -9,9 +9,9 @@ get a definition.
 
 ```
 #include "endianess.h"
-#if __BYTE_ORDER == __LITTLE_ENDIAN
+#if ENDIANESS_LE
 /* little endian code here */
-#elif __BYTE_ORDER == __BIG_ENDIAN
+#elif ENDIANESS_BE
 /* big endian code here */
 #endif
 ```
