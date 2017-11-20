@@ -114,5 +114,64 @@
 # error "sorry, we couldnt detect endianess for your system! please set -DENDIANESS_LE=1 or 0 using your CPPFLAGS/CFLAGS and open an issue for your system on https://github.com/rofl0r/endianess.h - thanks!"
 #endif
 
+#include <stdint.h>
+
+static __inline uint16_t end_bswap16(uint16_t __x)
+{
+        return __x<<8 | __x>>8;
+}
+
+static __inline uint32_t end_bswap32(uint32_t __x)
+{
+        return __x>>24 | __x>>8&0xff00 | __x<<8&0xff0000 | __x<<24;
+}
+
+static __inline uint64_t end_bswap64(uint64_t __x)
+{
+        return end_bswap32(__x)+0ULL<<32 | end_bswap32(__x>>32);
+}
+
+#ifdef ENDIANESS_LE
+#define end_htobe16(x) end_bswap16(x)
+#define end_be16toh(x) end_bswap16(x)
+#define end_betoh16(x) end_bswap16(x)
+#define end_htobe32(x) end_bswap32(x)
+#define end_be32toh(x) end_bswap32(x)
+#define end_betoh32(x) end_bswap32(x)
+#define end_htobe64(x) end_bswap64(x)
+#define end_be64toh(x) end_bswap64(x)
+#define end_betoh64(x) end_bswap64(x)
+#define end_htole16(x) (uint16_t)(x)
+#define end_le16toh(x) (uint16_t)(x)
+#define end_letoh16(x) (uint16_t)(x)
+#define end_htole32(x) (uint32_t)(x)
+#define end_le32toh(x) (uint32_t)(x)
+#define end_letoh32(x) (uint32_t)(x)
+#define end_htole64(x) (uint64_t)(x)
+#define end_le64toh(x) (uint64_t)(x)
+#define end_letoh64(x) (uint64_t)(x)
+#elif ENDIANESS_BE
+#define end_htobe16(x) (uint16_t)(x)
+#define end_be16toh(x) (uint16_t)(x)
+#define end_betoh16(x) (uint16_t)(x)
+#define end_htobe32(x) (uint32_t)(x)
+#define end_be32toh(x) (uint32_t)(x)
+#define end_betoh32(x) (uint32_t)(x)
+#define end_htobe64(x) (uint64_t)(x)
+#define end_be64toh(x) (uint64_t)(x)
+#define end_betoh64(x) (uint64_t)(x)
+#define end_htole16(x) end_bswap16(x)
+#define end_le16toh(x) end_bswap16(x)
+#define end_letoh16(x) end_bswap16(x)
+#define end_htole32(x) end_bswap32(x)
+#define end_le32toh(x) end_bswap32(x)
+#define end_letoh32(x) end_bswap32(x)
+#define end_htole64(x) end_bswap64(x)
+#define end_le64toh(x) end_bswap64(x)
+#define end_letoh64(x) end_bswap64(x)
+#else
+# error "no endianess detected"
+#endif
+
 #endif
 
