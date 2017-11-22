@@ -22,6 +22,16 @@
    to debug this header yourself, you can define ENDIANESS_DEBUG to see
    warnings from where we take the defs for the specific target.
 
+   if you need only the conversion functions from big to little endian
+   and vice versa, you may want to #define ENDIANESS_PORTABLE_CONVERSION
+   prior to including this header. that way the code will fallback to a
+   a slower, but portable version of the conversion functions that work
+   even if the endianess can't be determined at compile time.
+   however, if using it, it's not guarantueed that ENDIANESS_LE/BE will
+   be defined.
+   most people however need only the conversion functions in their code,
+   so if you stick to them you can safely turn the portable conversion on.
+
 */
 
 /* this should catch all modern GCCs and clang */
@@ -110,11 +120,12 @@
 # endif
 #endif
 
-#if !(defined(ENDIANESS_LE))
+#if !(defined(ENDIANESS_LE)) && !(defined(ENDIANESS_PORTABLE_CONVERSION))
 # error "sorry, we couldnt detect endianess for your system! please set -DENDIANESS_LE=1 or 0 using your CPPFLAGS/CFLAGS and open an issue for your system on https://github.com/rofl0r/endianess.h - thanks!"
 #endif
 
 #include <stdint.h>
+#include <limits.h>
 
 static __inline uint16_t end_bswap16(uint16_t __x)
 {
@@ -131,47 +142,120 @@ static __inline uint64_t end_bswap64(uint64_t __x)
         return end_bswap32(__x)+0ULL<<32 | end_bswap32(__x>>32);
 }
 
+static __inline uint16_t end_net2host16(uint16_t net_number)
+{
+	uint16_t result = 0;
+	int i;
+	for (i = 0; i < (int)sizeof(result); i++) {
+		result <<= CHAR_BIT;
+		result += (((unsigned char *)&net_number)[i] & UCHAR_MAX);
+	}
+	return result;
+}
+
+static __inline uint16_t end_host2net16(uint16_t native_number)
+{
+	uint16_t result = 0;
+	int i;
+	for (i = (int)sizeof(result) - 1; i >= 0; i--) {
+		((unsigned char *)&result)[i] = native_number & UCHAR_MAX;
+		native_number >>= CHAR_BIT;
+	}
+	return result;
+}
+
+static __inline uint32_t end_net2host32(uint32_t net_number)
+{
+	uint32_t result = 0;
+	int i;
+	for (i = 0; i < (int)sizeof(result); i++) {
+		result <<= CHAR_BIT;
+		result += (((unsigned char *)&net_number)[i] & UCHAR_MAX);
+	}
+	return result;
+}
+
+static __inline uint32_t end_host2net32(uint32_t native_number)
+{
+	uint32_t result = 0;
+	int i;
+	for (i = (int)sizeof(result) - 1; i >= 0; i--) {
+		((unsigned char *)&result)[i] = native_number & UCHAR_MAX;
+		native_number >>= CHAR_BIT;
+	}
+	return result;
+}
+
+static __inline uint64_t end_net2host64(uint64_t net_number)
+{
+	uint64_t result = 0;
+	int i;
+	for (i = 0; i < (int)sizeof(result); i++) {
+		result <<= CHAR_BIT;
+		result += (((unsigned char *)&net_number)[i] & UCHAR_MAX);
+	}
+	return result;
+}
+
+static __inline uint64_t end_host2net64(uint64_t native_number)
+{
+	uint64_t result = 0;
+	int i;
+	for (i = (int)sizeof(result) - 1; i >= 0; i--) {
+		((unsigned char *)&result)[i] = native_number & UCHAR_MAX;
+		native_number >>= CHAR_BIT;
+	}
+	return result;
+}
+
 #ifdef ENDIANESS_LE
 #define end_htobe16(x) end_bswap16(x)
 #define end_be16toh(x) end_bswap16(x)
-#define end_betoh16(x) end_bswap16(x)
 #define end_htobe32(x) end_bswap32(x)
 #define end_be32toh(x) end_bswap32(x)
-#define end_betoh32(x) end_bswap32(x)
 #define end_htobe64(x) end_bswap64(x)
 #define end_be64toh(x) end_bswap64(x)
-#define end_betoh64(x) end_bswap64(x)
 #define end_htole16(x) (uint16_t)(x)
 #define end_le16toh(x) (uint16_t)(x)
-#define end_letoh16(x) (uint16_t)(x)
 #define end_htole32(x) (uint32_t)(x)
 #define end_le32toh(x) (uint32_t)(x)
-#define end_letoh32(x) (uint32_t)(x)
 #define end_htole64(x) (uint64_t)(x)
 #define end_le64toh(x) (uint64_t)(x)
-#define end_letoh64(x) (uint64_t)(x)
 #elif ENDIANESS_BE
 #define end_htobe16(x) (uint16_t)(x)
 #define end_be16toh(x) (uint16_t)(x)
-#define end_betoh16(x) (uint16_t)(x)
 #define end_htobe32(x) (uint32_t)(x)
 #define end_be32toh(x) (uint32_t)(x)
-#define end_betoh32(x) (uint32_t)(x)
 #define end_htobe64(x) (uint64_t)(x)
 #define end_be64toh(x) (uint64_t)(x)
-#define end_betoh64(x) (uint64_t)(x)
 #define end_htole16(x) end_bswap16(x)
 #define end_le16toh(x) end_bswap16(x)
-#define end_letoh16(x) end_bswap16(x)
 #define end_htole32(x) end_bswap32(x)
 #define end_le32toh(x) end_bswap32(x)
-#define end_letoh32(x) end_bswap32(x)
 #define end_htole64(x) end_bswap64(x)
 #define end_le64toh(x) end_bswap64(x)
-#define end_letoh64(x) end_bswap64(x)
 #else
-# error "no endianess detected"
+/* Resort to slower, but neutral code */
+#define end_htobe16(x)  end_host2net16(x)
+#define end_be16toh(x)  end_net2host16(x)
+#define end_htobe32(x)  end_host2net32(x)
+#define end_be32toh(x)  end_net2host32(x)
+#define end_htobe64(x)  end_host2net64(x)
+#define end_be64toh(x)  end_net2host64(x)
+#define end_htole16(x)  end_bswap_16(end_host2net16(x))
+#define end_le16toh(x)  end_bswap_16(end_host2net16(x))
+#define end_htole32(x)  end_bswap_32(end_host2net32(x))
+#define end_le32toh(x)  end_bswap_32(end_host2net32(x))
+#define end_htole64(x)  end_bswap_64(end_host2net64(x))
+#define end_le64toh(x)  end_bswap_64(end_host2net64(x))
 #endif
+
+#define end_ntoh16(x)  end_be16toh(x)
+#define end_hton16(x)  end_htobe16(x)
+#define end_ntoh32(x)  end_be32toh(x)
+#define end_hton32(x)  end_htobe32(x)
+#define end_ntoh64(x)  end_be64toh(x)
+#define end_hton64(x)  end_htobe64(x)
 
 #endif
 
