@@ -38,13 +38,13 @@
 # ifdef ENDIANESS_DEBUG
 #  warning "taking endianess from built-in __BYTE_ORDER__"
 # endif
-#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-# define ENDIANESS_LE 1
-# define ENDIANESS_BE 0
-#elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
-# define ENDIANESS_LE 0
-# define ENDIANESS_BE 1
-#endif
+# if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+#  define ENDIANESS_LE 1
+#  define ENDIANESS_BE 0
+# elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+#  define ENDIANESS_LE 0
+#  define ENDIANESS_BE 1
+# endif
 /* Try to derive from arch/compiler-specific macros */
 #elif defined(_X86_) || defined(__x86_64__) || defined(__i386__) || \
       defined(__i486__) || defined(__i586__) || defined(__i686__) || \
@@ -58,10 +58,10 @@
 # endif
 # define ENDIANESS_LE 1
 # define ENDIANESS_BE 0
-# elif defined(__MIPSEB) || defined(_MIPSEB) || defined(MIPSEB) || \
-       defined(__MICROBLAZEEB__) || defined(__ARMEB__) || \
-       (defined(__BIG_ENDIAN__) && __BIG_ENDIAN__ == 1) || \
-       (defined(_BIG_ENDIAN) && _BIG_ENDIAN == 1)
+#elif defined(__MIPSEB) || defined(_MIPSEB) || defined(MIPSEB) || \
+      defined(__MICROBLAZEEB__) || defined(__ARMEB__) || \
+      (defined(__BIG_ENDIAN__) && __BIG_ENDIAN__ == 1) || \
+      (defined(_BIG_ENDIAN) && _BIG_ENDIAN == 1)
 # ifdef ENDIANESS_DEBUG
 #  warning "detected big endian target CPU"
 # endif
@@ -208,45 +208,45 @@ static __inline uint64_t end_host2net64(uint64_t native_number)
 }
 
 #ifdef ENDIANESS_LE
-#define end_htobe16(x) end_bswap16(x)
-#define end_be16toh(x) end_bswap16(x)
-#define end_htobe32(x) end_bswap32(x)
-#define end_be32toh(x) end_bswap32(x)
-#define end_htobe64(x) end_bswap64(x)
-#define end_be64toh(x) end_bswap64(x)
-#define end_htole16(x) (uint16_t)(x)
-#define end_le16toh(x) (uint16_t)(x)
-#define end_htole32(x) (uint32_t)(x)
-#define end_le32toh(x) (uint32_t)(x)
-#define end_htole64(x) (uint64_t)(x)
-#define end_le64toh(x) (uint64_t)(x)
+# define end_htobe16(x) end_bswap16(x)
+# define end_be16toh(x) end_bswap16(x)
+# define end_htobe32(x) end_bswap32(x)
+# define end_be32toh(x) end_bswap32(x)
+# define end_htobe64(x) end_bswap64(x)
+# define end_be64toh(x) end_bswap64(x)
+# define end_htole16(x) (uint16_t)(x)
+# define end_le16toh(x) (uint16_t)(x)
+# define end_htole32(x) (uint32_t)(x)
+# define end_le32toh(x) (uint32_t)(x)
+# define end_htole64(x) (uint64_t)(x)
+# define end_le64toh(x) (uint64_t)(x)
 #elif ENDIANESS_BE
-#define end_htobe16(x) (uint16_t)(x)
-#define end_be16toh(x) (uint16_t)(x)
-#define end_htobe32(x) (uint32_t)(x)
-#define end_be32toh(x) (uint32_t)(x)
-#define end_htobe64(x) (uint64_t)(x)
-#define end_be64toh(x) (uint64_t)(x)
-#define end_htole16(x) end_bswap16(x)
-#define end_le16toh(x) end_bswap16(x)
-#define end_htole32(x) end_bswap32(x)
-#define end_le32toh(x) end_bswap32(x)
-#define end_htole64(x) end_bswap64(x)
-#define end_le64toh(x) end_bswap64(x)
+# define end_htobe16(x) (uint16_t)(x)
+# define end_be16toh(x) (uint16_t)(x)
+# define end_htobe32(x) (uint32_t)(x)
+# define end_be32toh(x) (uint32_t)(x)
+# define end_htobe64(x) (uint64_t)(x)
+# define end_be64toh(x) (uint64_t)(x)
+# define end_htole16(x) end_bswap16(x)
+# define end_le16toh(x) end_bswap16(x)
+# define end_htole32(x) end_bswap32(x)
+# define end_le32toh(x) end_bswap32(x)
+# define end_htole64(x) end_bswap64(x)
+# define end_le64toh(x) end_bswap64(x)
 #else
 /* Resort to slower, but neutral code */
-#define end_htobe16(x)  end_host2net16(x)
-#define end_be16toh(x)  end_net2host16(x)
-#define end_htobe32(x)  end_host2net32(x)
-#define end_be32toh(x)  end_net2host32(x)
-#define end_htobe64(x)  end_host2net64(x)
-#define end_be64toh(x)  end_net2host64(x)
-#define end_htole16(x)  end_bswap_16(end_host2net16(x))
-#define end_le16toh(x)  end_bswap_16(end_host2net16(x))
-#define end_htole32(x)  end_bswap_32(end_host2net32(x))
-#define end_le32toh(x)  end_bswap_32(end_host2net32(x))
-#define end_htole64(x)  end_bswap_64(end_host2net64(x))
-#define end_le64toh(x)  end_bswap_64(end_host2net64(x))
+# define end_htobe16(x)  end_host2net16(x)
+# define end_be16toh(x)  end_net2host16(x)
+# define end_htobe32(x)  end_host2net32(x)
+# define end_be32toh(x)  end_net2host32(x)
+# define end_htobe64(x)  end_host2net64(x)
+# define end_be64toh(x)  end_net2host64(x)
+# define end_htole16(x)  end_bswap_16(end_host2net16(x))
+# define end_le16toh(x)  end_bswap_16(end_host2net16(x))
+# define end_htole32(x)  end_bswap_32(end_host2net32(x))
+# define end_le32toh(x)  end_bswap_32(end_host2net32(x))
+# define end_htole64(x)  end_bswap_64(end_host2net64(x))
+# define end_le64toh(x)  end_bswap_64(end_host2net64(x))
 #endif
 
 #define end_ntoh16(x)  end_be16toh(x)
