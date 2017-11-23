@@ -1,6 +1,6 @@
-# endianess.h
+# endianness.h
 
-a one-file library to determine endianess at compile time.
+a one-file library to determine endianness at compile time.
 just drop a copy of the header in your source tree, use it
 and forget about all the platform-specific differences to
 get a definition.
@@ -8,10 +8,10 @@ get a definition.
 # synopsis
 
 ```
-#include "endianess.h"
-#if ENDIANESS_LE
+#include "endianness.h"
+#if ENDIANNESS_LE
 /* little endian code here */
-#elif ENDIANESS_BE
+#elif ENDIANNESS_BE
 /* big endian code here */
 #endif
 ```
