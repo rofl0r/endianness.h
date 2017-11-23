@@ -28,11 +28,11 @@
 
    If you need only the conversion functions from big to little endian
    and vice versa, you may want to #define ENDIANNESS_PORTABLE_CONVERSION
-   prior to including this header. That way the code will fallback to a
-   a slower, but portable version of the conversion functions that work
-   even if the endiannes can't be determined at compile time.
-   However, if using it, it's not guarantueed that ENDIANNESS_LE/BE will
-   be defined.
+   prior to including this header. That way, when the endiannes can't be
+   determined at compile time, the code will fallback to a slower,
+   but portable version of those functions.
+   However, if using it, it's not guaranteed that ENDIANNESS_LE/BE
+   will be defined.
    Most people however need only the conversion functions in their code,
    so if you stick to them you can safely turn the portable conversion on.
 */
