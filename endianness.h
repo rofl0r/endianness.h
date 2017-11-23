@@ -124,7 +124,7 @@
 #endif
 
 #if !(defined(ENDIANNESS_LE)) && !(defined(ENDIANNESS_PORTABLE_CONVERSION))
-# error "Sorry, we couldn't detect endiannes for your system! Please set -DENDIANNESS_LE=1 or 0 using your CPPFLAGS/CFLAGS and open an issue for your system on https://github.com/rofl0r/endianess.h - Thanks!"
+# error "Sorry, we couldn't detect endiannes for your system! Please set -DENDIANNESS_LE=1 or 0 using your CPPFLAGS/CFLAGS and open an issue for your system on https://github.com/rofl0r/endianness.h - Thanks!"
 #endif
 
 #include <stdint.h>
