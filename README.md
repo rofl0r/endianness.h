@@ -1,29 +1,29 @@
 # endianness.h
 
-a one-file library to determine endianness at compile time.
-just drop a copy of the header in your source tree, use it
+A one-file library to determine endianness at compile time.
+Just drop a copy of the header in your source tree, use it
 and forget about all the platform-specific differences to
 get a definition.
 
-# synopsis
+# Synopsis
 
-```
+```C
 #include "endianness.h"
 #if ENDIANNESS_LE
-/* little endian code here */
+/* Little endian code here */
 #elif ENDIANNESS_BE
-/* big endian code here */
+/* Big endian code here */
 #endif
 ```
 
-# license
+# License
 
-this file is published under the public domain.
-even in jurisdictions where the "public domain" is not an
-accepted opensource license, this header is too trivial
+This file is published under the public domain.
+Even in jurisdictions where the "public domain" is not an
+accepted open source license, this header is too trivial
 to even think about assigning a copyright.
 
-# contribution
+# Contribution
 
-if you notice an issue on a platform you're using, feel
+If you notice an issue on a platform you're using, feel
 free to open a PR or issue.
