@@ -1,7 +1,7 @@
 #ifndef ENDIANESS_H
 #define ENDIANESS_H
 
-/* this header is released under the public domain. grab it and drop
+/* This header is released under the public domain. Grab it and drop
    it into your project, include it and use the following macros
    to determine endianess:
 
@@ -11,7 +11,7 @@
 
    or, even nicer without littering your code with #ifdefs:
 
-   if(ENDIANESS_BE) { big_endian_code(); } else { little_endian_code(); }
+   if (ENDIANESS_BE) { big_endian_code(); } else { little_endian_code(); }
 
    ... since the compiler can optimize away unused branches, this makes your
    code easier to read while not loosing any of the advantage of using
@@ -19,22 +19,21 @@
    unused code path (rarely used conditonally compiled code paths often get
    defunct over time if nobody checks them all the time).
 
-   to debug this header yourself, you can define ENDIANESS_DEBUG to see
+   To debug this header yourself, you can define ENDIANESS_DEBUG to see
    warnings from where we take the defs for the specific target.
 
-   if you need only the conversion functions from big to little endian
+   If you need only the conversion functions from big to little endian
    and vice versa, you may want to #define ENDIANESS_PORTABLE_CONVERSION
-   prior to including this header. that way the code will fallback to a
+   prior to including this header. That way the code will fallback to a
    a slower, but portable version of the conversion functions that work
    even if the endianess can't be determined at compile time.
-   however, if using it, it's not guarantueed that ENDIANESS_LE/BE will
+   However, if using it, it's not guarantueed that ENDIANESS_LE/BE will
    be defined.
-   most people however need only the conversion functions in their code,
+   Most people however need only the conversion functions in their code,
    so if you stick to them you can safely turn the portable conversion on.
-
 */
 
-/* this should catch all modern GCCs and clang */
+/* This should catch all modern GCCs and Clang */
 #if (defined __BYTE_ORDER__) && (defined __ORDER_LITTLE_ENDIAN__)
 # ifdef ENDIANESS_DEBUG
 #  warning "taking endianess from built-in __BYTE_ORDER__"
@@ -46,7 +45,7 @@
 # define ENDIANESS_LE 0
 # define ENDIANESS_BE 1
 #endif
-/* try to derive from arch/compiler-specific macros */
+/* Try to derive from arch/compiler-specific macros */
 #elif defined(_X86_) || defined(__x86_64__) || defined(__i386__) || \
       defined(__i486__) || defined(__i586__) || defined(__i686__) || \
       defined(__MIPSEL) || defined(_MIPSEL) || defined(MIPSEL) || \
@@ -68,7 +67,7 @@
 # endif
 # define ENDIANESS_LE 0
 # define ENDIANESS_BE 1
-/* try to get it from a header. */
+/* Try to get it from a header */
 #else
 # if defined(__linux)
 #  ifdef ENDIANESS_DEBUG
@@ -104,8 +103,8 @@
 # endif
 #endif
 
-/* in case the user passed one of -DENDIANESS_LE or BE in CPPFLAS,
-   set the second one too. */
+/* In case the user passed one of -DENDIANESS_LE or BE in CPPFLAS,
+   set the second one too */
 #if defined(ENDIANESS_LE) && !(defined(ENDIANESS_BE))
 # if ENDIANESS_LE == 0
 #  define ENDIANESS_BE 1
@@ -258,4 +257,3 @@ static __inline uint64_t end_host2net64(uint64_t native_number)
 #define end_hton64(x)  end_htobe64(x)
 
 #endif
-
