@@ -18,10 +18,9 @@ get a definition.
 
 # License
 
-This file is published under the public domain.
-Even in jurisdictions where the "public domain" is not an
-accepted open source license, this header is too trivial
-to even think about assigning a copyright.
+This file is published under the public domain. In case the concept of
+public domain does not exists under your jurisdiction, you can consider it
+to be dual licensed under the MIT, Apache and WTFPL licenses.
 
 # Contribution
 

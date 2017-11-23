@@ -1,9 +1,13 @@
 #ifndef ENDIANNESS_H
 #define ENDIANNESS_H
 
-/* This header is released under the public domain. Grab it and drop
-   it into your project, include it and use the following macros
-   to determine endiannes:
+/* Public domain implementation for endianness detection and byte ordering on
+   several platforms. In case the concept of public domain does not exists
+   under your jurisdiction, you can consider it to be dual licensed
+   under the MIT, Apache and WTFPL licenses.
+
+   Grab it and drop it into your project, include it and use
+   the following macros to determine endianess:
 
    ENDIANNESS_LE, ENDIANNESS_BE
 
