@@ -40,7 +40,7 @@
 /* This should catch all modern GCCs and Clang */
 #if (defined __BYTE_ORDER__) && (defined __ORDER_LITTLE_ENDIAN__)
 # ifdef ENDIANNESS_DEBUG
-#  warning "taking endiannes from built-in __BYTE_ORDER__"
+#  warning "Taking endiannes from built-in __BYTE_ORDER__"
 # endif
 # if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
 #  define ENDIANNESS_LE 1
@@ -58,7 +58,7 @@
       (defined(_LITTLE_ENDIAN) && _LITTLE_ENDIAN == 1) || \
       defined(_M_IX86) || defined(_M_AMD64) /* MSVC */
 # ifdef ENDIANNESS_DEBUG
-#  warning "detected little endian target CPU"
+#  warning "Detected Little Endian target CPU"
 # endif
 # define ENDIANNESS_LE 1
 # define ENDIANNESS_BE 0
@@ -67,7 +67,7 @@
       (defined(__BIG_ENDIAN__) && __BIG_ENDIAN__ == 1) || \
       (defined(_BIG_ENDIAN) && _BIG_ENDIAN == 1)
 # ifdef ENDIANNESS_DEBUG
-#  warning "detected big endian target CPU"
+#  warning "Detected Big Endian target CPU"
 # endif
 # define ENDIANNESS_LE 0
 # define ENDIANNESS_BE 1
@@ -75,12 +75,12 @@
 #else
 # if defined(__linux)
 #  ifdef ENDIANNESS_DEBUG
-#   warning "taking endiannes from endian.h"
+#   warning "Taking endiannes from endian.h"
 #  endif
 #  include <endian.h>
 # else
 #  ifdef ENDIANNESS_DEBUG
-#   warning "taking endiannes from machine/endian.h"
+#   warning "Taking endiannes from machine/endian.h"
 #  endif
 #  include <machine/endian.h>
 # endif
@@ -124,7 +124,7 @@
 #endif
 
 #if !(defined(ENDIANNESS_LE)) && !(defined(ENDIANNESS_PORTABLE_CONVERSION))
-# error "sorry, we couldnt detect endiannes for your system! please set -DENDIANNESS_LE=1 or 0 using your CPPFLAGS/CFLAGS and open an issue for your system on https://github.com/rofl0r/endianess.h - thanks!"
+# error "Sorry, we couldn't detect endiannes for your system! Please set -DENDIANNESS_LE=1 or 0 using your CPPFLAGS/CFLAGS and open an issue for your system on https://github.com/rofl0r/endianess.h - Thanks!"
 #endif
 
 #include <stdint.h>
