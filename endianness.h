@@ -2,12 +2,12 @@
 #define ENDIANNESS_H
 
 /* Public domain implementation for endianness detection and byte ordering on
-   several platforms. In case the concept of public domain does not exists
+   several platforms. In case the concept of public domain does not exist
    under your jurisdiction, you can consider it to be dual licensed
    under the MIT, Apache and WTFPL licenses.
 
    Grab it and drop it into your project, include it and use
-   the following macros to determine endianess:
+   the following macros to determine endianness:
 
    ENDIANNESS_LE, ENDIANNESS_BE
 

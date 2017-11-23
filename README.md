@@ -19,7 +19,7 @@ get a definition.
 # License
 
 This file is published under the public domain. In case the concept of
-public domain does not exists under your jurisdiction, you can consider it
+public domain does not exist under your jurisdiction, you can consider it
 to be dual licensed under the MIT, Apache and WTFPL licenses.
 
 # Contribution
