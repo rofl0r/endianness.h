@@ -1,4 +1,4 @@
-# endianness.h
+# Description
 
 A one-file library to determine endianness at compile time.
 Just drop a copy of the header in your source tree, use it
@@ -10,9 +10,9 @@ get a definition.
 ```C
 #include "endianness.h"
 #if ENDIANNESS_LE
-/* Little endian code here */
+/* Little Endian code here */
 #elif ENDIANNESS_BE
-/* Big endian code here */
+/* Big Endian code here */
 #endif
 ```
 
