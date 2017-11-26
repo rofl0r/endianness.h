@@ -1,11 +1,27 @@
 # Description
 
-A one-file library to determine endianness at compile time.
-Just drop a copy of the header in your source tree, use it
-and forget about all the platform-specific differences to
-get a definition. Some of the usual conversion functions are also provided.
+A one-file public-domain library to determine endianness at compile time.
+Just drop a copy of the header in your source tree, use it and forget about all
+the platform-specific differences to get that endianess definition!
 
-# Synopsis
+The usual conversion functions are also provided.
+
+# Rationale
+
+If someone needs to know the endianess at compile time, there are 2 different
+use cases:
+
+- in some rare cases one needs to know the endianess to lay out structs and the
+  like, for example an RGB union; or directly in the code.
+
+- in 99% of the cases, just a conversion from one endian to the other is needed,
+  e.g. when a protocol defines that a value is stored in a specific endianness.
+
+# Use case 1 - compile time endianness detecion macro
+
+The header tries its best to determine the endianess from a number of possible
+sources, and if successful, defines both `ENDIANNESS_LE` and `ENDIANNESS_BE`
+macros to 0 or 1.
 
 ```C
 #include "endianness.h"
@@ -16,21 +32,29 @@ get a definition. Some of the usual conversion functions are also provided.
 #endif
 ```
 
-## Conversion functions
+or if the macro is to be used directly from the code, you can even use the nicer
+form (taking advantage of dead code elimination done by the compiler):
 
-All the functions start with the `end_` prefix.
-The conversion functions available are:
-
-```
-end_ntoh16(x)  // equivalent of ntohs(x) from <netinet/in.h>
-end_hton16(x)  //               htons(x)
-end_ntoh32(x)  //               ntohl(x)
-end_hton32(x)  //               htonl(x)
-end_ntoh64(x)
-end_hton64(x)
+```C
+if (ENDIANNESS_LE) {
+    ...
+} else {
+    ...
+}
 ```
 
-or, more generally:
+Note that on very exotic platforms, the detection may fail. The header then
+throws an error and tells the user to define the macros by hand (and report the
+system here so we can get it fixed).
+However, if your use case is just conversion, there's a way to avoid erroring
+out. Read on!
+
+# Use case 2 - endian conversion
+
+In the majority of use cases, one wants just to convert from little to big
+endian, and vice versa (or actually to and from host endianness!).
+
+The provided endian conversion functions/macros start with the `end_` prefix.
 
 ```
 end_htobe16(x)  // Host to Big Endian 16
@@ -47,25 +71,36 @@ end_htole64(x)
 end_le64toh(x)  // Little Endian 64 to Host
 ```
 
-Finally the byteswap functions:
+For conversion of network byte order (big endian) to host order:
+```
+end_ntoh16(x)  // equivalent of ntohs(x) from <netinet/in.h>
+end_hton16(x)  //               htons(x)
+end_ntoh32(x)  //               ntohl(x)
+end_hton32(x)  //               htonl(x)
+end_ntoh64(x)
+end_hton64(x)
+```
+
+General purpose byteswap functions:
 ```
 end_bswap16(x)
 end_bswap32(x)
 end_bswap64(x)
 ```
 
-If all you need are these functions and not the compile-time detection macros
-you may want to `#define ENDIANNESS_PORTABLE_CONVERSION`
-prior to including this header, as shown below:
+In case the endianness detection failed and you need only those conversions,
+you can avoid erroring out by defining `ENDIANNESS_PORTABLE_CONVERSION` prior to
+including the header:
 
 ```C
 #define ENDIANNESS_PORTABLE_CONVERSION
 #include "endianness.h"
 ```
 
-That way, when the endiannes can't be determined at compile time, the code
-will fallback to a slower, but portable version of those functions.
-However, if using it, it's not guaranteed that ENDIANNESS_LE/BE will be defined.
+That way, the code will fallback to a slightly slower, but portable version of
+the conversion functions.
+However, if `ENDIANNESS_PORTABLE_CONVERSION` is in use, there's no guarantee
+that the macros for use case 1 will be defined!
 
 # License
 
@@ -77,5 +112,5 @@ to be dual licensed under the [MIT](https://opensource.org/licenses/MIT),
 
 # Contribution
 
-If you notice an issue on a platform you're using, feel
-free to open a PR or issue.
+If you notice an issue on a platform you're using, feel free to open a PR or
+issue on the Github repository https://github.com/rofl0r/endianness.h .
