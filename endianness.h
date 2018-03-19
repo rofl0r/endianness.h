@@ -127,6 +127,15 @@
 # error "Sorry, we couldn't detect endiannes for your system! Please set -DENDIANNESS_LE=1 or 0 using your CPPFLAGS/CFLAGS and open an issue for your system on https://github.com/rofl0r/endianness.h - Thanks!"
 #endif
 
+#ifdef ENDIANNESS_DEBUG
+# if ENDIANNESS_LE == 1
+#  warning "Detected Little Endian target CPU"
+# endif
+# if ENDIANNESS_BE == 1
+#  warning "Detected BIG Endian target CPU"
+# endif
+#endif
+
 #include <stdint.h>
 #include <limits.h>
 
