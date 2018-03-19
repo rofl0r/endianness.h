@@ -25,9 +25,9 @@ macros to 0 or 1.
 
 ```C
 #include "endianness.h"
-#if ENDIANNESS_LE
+#if ENDIANNESS_LE +0 == 1
 /* Little Endian code here */
-#elif ENDIANNESS_BE
+#elif ENDIANNESS_BE +0 == 1
 /* Big Endian code here */
 #endif
 ```
