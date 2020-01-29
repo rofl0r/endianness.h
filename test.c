@@ -117,9 +117,11 @@ void executeBigEndianConversionTests()
 	puts("\t# Network order (big-endian) to host:");
 
 	assert(host_16bit == end_ntoh16( *(const uint16_t*)bigEndian));
+	assert(host_16bit == end_ntohs(  *(const uint16_t*)bigEndian));
 	assert(host_16bit == end_be16toh(*(const uint16_t*)bigEndian));
 
 	assert(host_32bit == end_ntoh32( *(const uint32_t*)bigEndian));
+	assert(host_32bit == end_ntohl(  *(const uint32_t*)bigEndian));
 	assert(host_32bit == end_be32toh(*(const uint32_t*)bigEndian));
 
 	assert(host_64bit == end_ntoh64( *(const uint64_t*)bigEndian));
@@ -128,9 +130,11 @@ void executeBigEndianConversionTests()
 
 	puts("\t# Host to network order (big-endian):");
 	assert(*((const uint16_t*)bigEndian) == end_hton16( host_16bit));
+	assert(*((const uint16_t*)bigEndian) == end_htons(  host_16bit));
 	assert(*((const uint16_t*)bigEndian) == end_htobe16(host_16bit));
 
 	assert(*((const uint32_t*)bigEndian) == end_hton32( host_32bit));
+	assert(*((const uint32_t*)bigEndian) == end_htonl(  host_32bit));
 	assert(*((const uint32_t*)bigEndian) == end_htobe32(host_32bit));
 
 	assert(*((const uint64_t*)bigEndian) == end_hton64( host_64bit));
