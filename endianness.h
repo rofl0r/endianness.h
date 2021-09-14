@@ -73,7 +73,7 @@
 # define ENDIANNESS_BE 1
 /* Try to get it from a header */
 #else
-# if defined(__linux)
+# if defined(__GLIBC__) || defined(__linux)
 #  ifdef ENDIANNESS_DEBUG
 #   warning "Taking endiannes from endian.h"
 #  endif
