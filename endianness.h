@@ -37,7 +37,7 @@
    so if you stick to them you can safely turn the portable conversion on.
 */
 
-/* This should catch all modern GCCs and Clang */
+/* This catches all modern GCCs (>= 4.6) and Clang (>=3.2) */
 #if (defined __BYTE_ORDER__) && (defined __ORDER_LITTLE_ENDIAN__)
 # ifdef ENDIANNESS_DEBUG
 #  warning "Taking endiannes from built-in __BYTE_ORDER__"
@@ -75,12 +75,18 @@
 # define ENDIANNESS_BE 1
 /* Try to get it from a header */
 #else
-# if defined(__linux)
+# if defined(__linux) || defined(__HAIKU__)
 #  ifdef ENDIANNESS_DEBUG
 #   warning "Taking endiannes from endian.h"
 #  endif
 #  include <endian.h>
-# else
+# elif defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__) || \
+       defined(__DragonFly__)
+#  ifdef ENDIANNESS_DEBUG
+#   warning "Taking endiannes from sys/endian.h"
+#  endif
+#  include <sys/endian.h>
+# elif defined(__APPLE__)
 #  ifdef ENDIANNESS_DEBUG
 #   warning "Taking endiannes from machine/endian.h"
 #  endif
