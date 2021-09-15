@@ -98,7 +98,9 @@ including the header:
 ```
 
 That way, the code will fallback to a slightly slower, but portable version of
-the conversion functions.
+the conversion functions. On modern compilers like GCC 8.0 these compile into
+a single move and a byteswap instruction.
+
 However, if `ENDIANNESS_PORTABLE_CONVERSION` is in use, there's no guarantee
 that the macros for use case 1 will be defined!
 
@@ -114,3 +116,35 @@ to be dual licensed under the [MIT](https://opensource.org/licenses/MIT),
 
 If you notice an issue on a platform you're using, feel free to open a PR or
 issue on the Github repository https://github.com/rofl0r/endianness.h .
+
+# Appendix A: Methodology used to detect endianness
+
+The header first tries to use the macro `__BYTE_ORDER__` which is built into
+all GCC versions >= 4.6 and all clang versions >= 3.1. Recent ICC versions
+also support it.
+As GCC 4.6.0 was released in 2011, this should already cover the vast majority
+of available toolchains for UNIX platforms and other platforms targetted by
+GCC/Clang, such as mingw.
+
+If that fails, a number of CPU-specific macros is tested.
+The list was assembled carefully by looking at built-in macros for compilers
+targeting all platforms supported by musl libc (which includes e.g.
+`powerpc`, `mips`, `arm`, `aarch64`, `microblaze` and many others), but also
+by looking at predefined macros for compilers like MSVC and others.
+For architectures that support both little and big endian configuration, we
+only test for them when a macro to detect the subarch, e.g. `mipsel` exists,
+in order to not produce wrong results.
+Older compilers targeting one such architecture, `avr`, don't provide a macro
+that could be used to determine the endianness, and even though 99% of users
+use avr in little-endian configuration, we do not hardcode that avr equals
+little endian.
+
+If even this does not yield detection, we next try to open the header `endian.h`
+which is unfortunately not standardized and available in different locations
+in different Operating Systems. Here we use a list of OS detection macros to
+derive the correct location of endian.h and then use the macros it provides.
+Note that getting at this point requires that either a really old or a really
+exotic compiler is used, and that one targetting a really exotic architecture.
+If even this pass fails, we're dealing with an exotic compiler, an exotic
+architecture, and an exotic OS - most likely a bare-metal toolchain for
+embedded development.
