@@ -145,7 +145,6 @@
 #endif
 
 #include <stdint.h>
-#include <limits.h>
 
 static __inline uint16_t end_bswap16(uint16_t __x)
 {
@@ -162,70 +161,41 @@ static __inline uint64_t end_bswap64(uint64_t __x)
         return ((end_bswap32((uint32_t)__x)+0ULL)<<32) | (end_bswap32(__x>>32));
 }
 
-static __inline uint16_t end_net2host16(uint16_t net_number)
+
+static __inline uint16_t end_htobe16_impl(uint16_t n)
 {
-	uint16_t result = 0;
-	int i;
-	for (i = 0; i < (int)sizeof(result); i++) {
-		result <<= CHAR_BIT;
-		result += (((unsigned char *)&net_number)[i] & UCHAR_MAX);
-	}
-	return result;
+	union { int i; char c; } u = { 1 };
+	return u.c ? end_bswap16(n) : n;
 }
 
-static __inline uint16_t end_host2net16(uint16_t native_number)
+static __inline uint16_t end_htole16_impl(uint16_t n)
 {
-	uint16_t result = 0;
-	int i;
-	for (i = (int)sizeof(result) - 1; i >= 0; i--) {
-		((unsigned char *)&result)[i] = native_number & UCHAR_MAX;
-		native_number >>= CHAR_BIT;
-	}
-	return result;
+	union { int i; char c; } u = { 1 };
+	return u.c ? n : end_bswap16(n);
 }
 
-static __inline uint32_t end_net2host32(uint32_t net_number)
+static __inline uint32_t end_htobe32_impl(uint32_t n)
 {
-	uint32_t result = 0;
-	int i;
-	for (i = 0; i < (int)sizeof(result); i++) {
-		result <<= CHAR_BIT;
-		result += (((unsigned char *)&net_number)[i] & UCHAR_MAX);
-	}
-	return result;
+	union { int i; char c; } u = { 1 };
+	return u.c ? end_bswap32(n) : n;
 }
 
-static __inline uint32_t end_host2net32(uint32_t native_number)
+static __inline uint32_t end_htole32_impl(uint32_t n)
 {
-	uint32_t result = 0;
-	int i;
-	for (i = (int)sizeof(result) - 1; i >= 0; i--) {
-		((unsigned char *)&result)[i] = native_number & UCHAR_MAX;
-		native_number >>= CHAR_BIT;
-	}
-	return result;
+	union { int i; char c; } u = { 1 };
+	return u.c ? n : end_bswap32(n);
 }
 
-static __inline uint64_t end_net2host64(uint64_t net_number)
+static __inline uint64_t end_htobe64_impl(uint64_t n)
 {
-	uint64_t result = 0;
-	int i;
-	for (i = 0; i < (int)sizeof(result); i++) {
-		result <<= CHAR_BIT;
-		result += (((unsigned char *)&net_number)[i] & UCHAR_MAX);
-	}
-	return result;
+	union { int i; char c; } u = { 1 };
+	return u.c ? end_bswap64(n) : n;
 }
 
-static __inline uint64_t end_host2net64(uint64_t native_number)
+static __inline uint64_t end_htole64_impl(uint64_t n)
 {
-	uint64_t result = 0;
-	int i;
-	for (i = (int)sizeof(result) - 1; i >= 0; i--) {
-		((unsigned char *)&result)[i] = native_number & UCHAR_MAX;
-		native_number >>= CHAR_BIT;
-	}
-	return result;
+	union { int i; char c; } u = { 1 };
+	return u.c ? n : end_bswap64(n);
 }
 
 #if ENDIANNESS_LE+0 == 1
@@ -256,18 +226,18 @@ static __inline uint64_t end_host2net64(uint64_t native_number)
 # define end_le64toh(x) end_bswap64(x)
 #else
 /* Resort to slower, but neutral code */
-# define end_htobe16(x)  end_host2net16(x)
-# define end_be16toh(x)  end_net2host16(x)
-# define end_htobe32(x)  end_host2net32(x)
-# define end_be32toh(x)  end_net2host32(x)
-# define end_htobe64(x)  end_host2net64(x)
-# define end_be64toh(x)  end_net2host64(x)
-# define end_htole16(x)  end_bswap_16(end_host2net16(x))
-# define end_le16toh(x)  end_bswap_16(end_host2net16(x))
-# define end_htole32(x)  end_bswap_32(end_host2net32(x))
-# define end_le32toh(x)  end_bswap_32(end_host2net32(x))
-# define end_htole64(x)  end_bswap_64(end_host2net64(x))
-# define end_le64toh(x)  end_bswap_64(end_host2net64(x))
+# define end_htobe16(x)  end_htobe16_impl(x)
+# define end_be16toh(x)  end_htobe16_impl(x)
+# define end_htobe32(x)  end_htobe32_impl(x)
+# define end_be32toh(x)  end_htobe32_impl(x)
+# define end_htobe64(x)  end_htobe64_impl(x)
+# define end_be64toh(x)  end_htobe64_impl(x)
+# define end_htole16(x)  end_htole16_impl(x)
+# define end_le16toh(x)  end_htole16_impl(x)
+# define end_htole32(x)  end_htole32_impl(x)
+# define end_le32toh(x)  end_htole32_impl(x)
+# define end_htole64(x)  end_htole64_impl(x)
+# define end_le64toh(x)  end_htole64_impl(x)
 #endif
 
 #define end_ntoh16(x)  end_be16toh(x)
