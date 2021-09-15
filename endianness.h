@@ -54,6 +54,7 @@
       defined(__i486__) || defined(__i586__) || defined(__i686__) || \
       defined(__MIPSEL) || defined(_MIPSEL) || defined(MIPSEL) || \
       defined(__ARMEL__) || \
+      defined(__MSP430__) || \
       (defined(__LITTLE_ENDIAN__) && __LITTLE_ENDIAN__ == 1) || \
       (defined(_LITTLE_ENDIAN) && _LITTLE_ENDIAN == 1) || \
       defined(_M_ARM) || defined(_M_ARM64) || \
