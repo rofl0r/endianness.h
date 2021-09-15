@@ -56,6 +56,7 @@
       defined(__ARMEL__) || \
       (defined(__LITTLE_ENDIAN__) && __LITTLE_ENDIAN__ == 1) || \
       (defined(_LITTLE_ENDIAN) && _LITTLE_ENDIAN == 1) || \
+      defined(_M_ARM) || defined(_M_ARM64) || \
       defined(_M_IX86) || defined(_M_AMD64) /* MSVC */
 # ifdef ENDIANNESS_DEBUG
 #  warning "Detected Little Endian target CPU"
